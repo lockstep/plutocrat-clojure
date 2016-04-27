@@ -1,9 +1,14 @@
 (ns plutocrat-clojure.handler
   (:require [compojure.core :refer :all]
-            [compojure.route :as route]
+            [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
             [ring.middleware.json :refer [wrap-json-response]]
-            [ring.util.response :refer [response]]))
+            [ring.util.response :refer [created]]))
 
-(defroutes app-routes)
+(defroutes app-routes
+  (POST "/api/v1/users" {params :params}
+        (created "/api/v1/users/FIXME" params)))
 
-(def app (wrap-json-response app-routes))
+(def app
+  (-> app-routes
+      wrap-json-response
+      (wrap-defaults api-defaults)))
